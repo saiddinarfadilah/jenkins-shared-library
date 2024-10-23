@@ -1,0 +1,2 @@
+# Contoh isi file resources
+This is a resource file that can be accessed by the shared library.
