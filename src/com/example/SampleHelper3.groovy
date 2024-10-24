@@ -21,9 +21,9 @@ class SampleHelper3 {
     // Fungsi untuk membaca file properties
     static Properties loadProperties(def script, String filename) {
         def props = new Properties()
-        def inputStream = script.getClass().getClassLoader().getResourceAsStream(filename)
-        if (inputStream) {
-            props.load(inputStream)
+        def fileContent = script.libraryResource(filename) // Mengambil file dari shared library
+        if (fileContent) {
+            props.load(new StringReader(fileContent))
         } else {
             script.error("File ${filename} tidak ditemukan!")
         }
