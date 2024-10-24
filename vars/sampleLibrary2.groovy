@@ -8,24 +8,24 @@ def buildProject() {
     // Logic for building the project
     echo "Building the project..."
     // Example: if it's a Maven project
-    sh 'mvn clean install'
+    bat 'mvn clean install'
 }
 
 def runTests() {
     // Logic for running tests
     echo "Running tests..."
     // Example: if it's a Maven project
-    sh 'mvn test'
+    bat 'mvn test'
 }
 
 def deployToEnvironment(String environment) {
     // Logic for deploying to a specific environment
     echo "Deploying to ${environment}..."
     if (environment == 'production') {
-        sh 'echo Deploying to production...'
+        bat 'echo Deploying to production...'
         // Add actual deployment commands here
     } else if (environment == 'sit') {
-        sh 'echo Deploying to development...'
+        bat 'echo Deploying to development...'
         // Add actual deployment commands here
     } else {
         error "Unknown environment: ${environment}"
