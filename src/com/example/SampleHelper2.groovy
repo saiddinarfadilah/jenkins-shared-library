@@ -1,3 +1,5 @@
+package com.example
+
 class SampleHelper2 {
 
     // Menjalankan perintah build berdasarkan OS
