@@ -1,55 +1,57 @@
-package com.example
-
 class SampleHelper2 {
 
-    static void runBuildCommand(String command) {
-        if (isWindows()) {
-            bat command  // Use bat on Windows
+    // Menjalankan perintah build berdasarkan OS
+    static void runBuildCommand(String command, def script) {
+        if (isWindows(script)) {
+            // Gunakan step bawaan Jenkins untuk Windows
+            script.bat command
         } else {
-            sh command   // Use sh on non-Windows (Linux/MacOS)
+            // Gunakan step bawaan Jenkins untuk Linux/MacOS
+            script.sh command
         }
     }
 
-    static boolean isWindows() {
-        return System.properties['os.name'].toLowerCase().contains('windows')
+    // Memeriksa apakah lingkungan saat ini adalah Windows
+    static boolean isWindows(def script) {
+        return script.isUnix() == false
     }
 
-    // Method for building the project
-    static void buildProject(String buildTool) {
+    // Metode untuk membangun proyek
+    static void buildProject(String buildTool, def script) {
         if (buildTool == 'maven') {
-            println "Building the project with Maven..."
-            runBuildCommand('mvn clean install')
+            script.echo "Membangun proyek dengan Maven..."
+            runBuildCommand('mvn clean install', script)
         } else if (buildTool == 'gradle') {
-            println "Building the project with Gradle..."
-            runBuildCommand('./gradlew build')
+            script.echo "Membangun proyek dengan Gradle..."
+            runBuildCommand('./gradlew build', script)
         } else {
-            throw new IllegalArgumentException("Unknown build tool: ${buildTool}")
+            throw new IllegalArgumentException("Alat build tidak dikenal: ${buildTool}")
         }
     }
 
-    // Method for running tests
-    static void runTests(String testTool) {
+    // Metode untuk menjalankan pengujian
+    static void runTests(String testTool, def script) {
         if (testTool == 'maven') {
-            println "Running tests with Maven..."
-            runBuildCommand('mvn test')
+            script.echo "Menjalankan pengujian dengan Maven..."
+            runBuildCommand('mvn test', script)
         } else if (testTool == 'gradle') {
-            println "Running tests with Gradle..."
-            runBuildCommand('./gradlew test')
+            script.echo "Menjalankan pengujian dengan Gradle..."
+            runBuildCommand('./gradlew test', script)
         } else {
-            throw new IllegalArgumentException("Unknown test tool: ${testTool}")
+            throw new IllegalArgumentException("Alat pengujian tidak dikenal: ${testTool}")
         }
     }
 
-    // Method for notifying based on result
-    static void notify(String status, String channel) {
+    // Metode untuk mengirim notifikasi berdasarkan hasil
+    static void notify(String status, String channel, def script) {
         if (status == 'success') {
-            println "Sending success notification to ${channel}"
-            // Example: slackSend(channel: channel, message: "Build succeeded!")
+            script.echo "Mengirim notifikasi sukses ke ${channel}"
+            // Contoh: script.slackSend(channel: channel, message: "Build berhasil!")
         } else if (status == 'failure') {
-            println "Sending failure notification to ${channel}"
-            // Example: slackSend(channel: channel, message: "Build failed!")
+            script.echo "Mengirim notifikasi gagal ke ${channel}"
+            // Contoh: script.slackSend(channel: channel, message: "Build gagal!")
         } else {
-            throw new IllegalArgumentException("Unknown status: ${status}")
+            throw new IllegalArgumentException("Status tidak dikenal: ${status}")
         }
     }
 }
